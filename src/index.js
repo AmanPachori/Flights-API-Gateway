@@ -4,6 +4,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const { ServerConfig } = require("./config");
 const apiRoutes = require("./routes");
+const serverConfig = require("./config/server-config");
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -16,7 +17,7 @@ app.use(limiter);
 app.use(
   "/flightsService",
   createProxyMiddleware({
-    target: "http://localhost:8000/",
+    target: serverConfig.FLIGHT_SERVICE,
     changeOrigin: true,
     pathRewrite: { "^/flightsService": "/" },
   })
@@ -24,7 +25,7 @@ app.use(
 app.use(
   "/bookingService",
   createProxyMiddleware({
-    target: "http://localhost:4000/",
+    target: serverConfig.BOOKING_SERVICE,
     changeOrigin: true,
     pathRewrite: { "^/bookingService": "/" },
   })
